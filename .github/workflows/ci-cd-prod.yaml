@@ -12,6 +12,7 @@ jobs:
             PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
             SERVICE: ${{ secrets.GCP_SERVICE }}
             REGION: ${{ secrets.GCP_REGION }}
+            RUNNER: ${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}
             TAG: latest
         runs-on: ubuntu-latest
         environment: development
@@ -49,7 +50,8 @@ jobs:
               run: |
                   gcloud run deploy ${{ env.SERVICE }} \
                     --platform=managed \
-                    --port=3000 \
+                    --service-account=${{ env.RUNNER }} \
+                    --port=8080 \
                     --region=${{ env.REGION }} \
                     --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" \
                     --min-instances=0 \

@@ -1,14 +1,13 @@
-FROM oven/bun:latest as base
-WORKDIR /usr/src/app
+FROM golang:1.22 AS builder
+
+WORKDIR /app
 
 COPY . .
-RUN bun install
 
-ENV NODE_ENV=production
-ENV PORT=3000
+RUN go mod download
 
-RUN chown -R bun:bun ./
+RUN go build -o caravan
 
-USER bun
-EXPOSE 3000/tcp
-CMD [ "bun", "run", "src/index.ts" ]
+EXPOSE 8080
+
+CMD ["./caravan"]
