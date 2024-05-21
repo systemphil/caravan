@@ -1,4 +1,4 @@
-name: stripe-warden CI/CD DEV
+name: CI/CD Development
 
 on:
     workflow_dispatch:
