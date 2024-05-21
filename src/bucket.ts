@@ -29,7 +29,7 @@ export async function gcGenerateReadSignedUrl({
 }) {
     const filePath = `video/${id}/${fileName}`;
     const options: GetSignedUrlConfig = {
-        version: "v4",
+        version: "v2",
         action: "read",
         expires: Date.now() + 15 * 60 * 1000, // 15 minutes
     };
