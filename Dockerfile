@@ -1,14 +1,19 @@
-FROM oven/bun:latest as base
-WORKDIR /usr/src/app
+FROM golang:1.19-alpine AS builder
 
-COPY . .
-RUN bun install
+WORKDIR /app
 
-ENV NODE_ENV=production
-ENV PORT=3000
+COPY caravan/* .
 
-RUN chown -R bun:bun ./
+RUN go mod download
 
-USER bun
-EXPOSE 3000/tcp
-CMD [ "bun", "run", "src/index.ts" ]
+RUN go build -o caravan
+
+FROM alpine:latest
+
+COPY --from=builder caravan ./
+
+WORKDIR /app
+
+EXPOSE 8080
+
+CMD ["./caravan"]
