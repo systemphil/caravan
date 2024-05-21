@@ -10,7 +10,7 @@ RUN go build -o caravan
 
 FROM alpine:latest
 
-COPY --from=builder caravan ./
+COPY --from=builder caravan /app
 
 WORKDIR /app
 
