@@ -51,7 +51,7 @@ jobs:
                   gcloud run deploy ${{ env.SERVICE }} \
                     --platform=managed \
                     --service-account=${{ env.RUNNER }} \
-                    --port=3000 \
+                    --port=8080 \
                     --region=${{ env.REGION }} \
                     --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" \
                     --min-instances=0 \
