@@ -24,5 +24,3 @@ app.get("/:id/:filename", async (req: Request, res: Response) => {
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
-
-// http://localhost:3000/cluvqhyly0007uwfdmg2hn33a/VID_20200103_135115.mp4

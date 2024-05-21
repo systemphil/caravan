@@ -1,0 +1,58 @@
+name: stripe-warden CI/CD DEV
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+
+jobs:
+    build-and-deploy:
+        env:
+            PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+            SERVICE: ${{ secrets.GCP_SERVICE }}
+            REGION: ${{ secrets.GCP_REGION }}
+            TAG: latest
+        runs-on: ubuntu-latest
+        environment: development
+        steps:
+            # checkout the repo
+            - name: "Checkout GitHub Action"
+              uses: actions/checkout@master
+
+            # Authenticate to Google Cloud
+            - name: Google Auth
+              id: auth
+              uses: "google-github-actions/auth@v2"
+              with:
+                  credentials_json: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+
+            # Authenticate Docker to Google Cloud Artifact Registry
+            - name: Docker Auth
+              id: docker-auth
+              uses: "docker/login-action@v3"
+              with:
+                  username: _json_key
+                  password: "${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}"
+                  registry: "${{ env.REGION }}-docker.pkg.dev"
+
+            # Build and push the Docker image
+            - name: Build and Push Container
+              run: |-
+                  cd packages/stripe-warden &&
+                  docker build \
+                  -f Dockerfile \
+                  -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" .
+                  echo "=== IMAGE NAME: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+                  docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
+
+            # Deploy to Cloud Run
+            - name: Deploy to Cloud Run
+              run: |
+                  gcloud run deploy ${{ env.SERVICE }} \
+                    --platform=managed \
+                    --port=3000 \
+                    --region=${{ env.REGION }} \
+                    --image="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" \
+                    --min-instances=0 \
+                    --max-instances=1
