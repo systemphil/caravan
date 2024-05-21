@@ -39,11 +39,9 @@ jobs:
             # Build and push the Docker image
             - name: Build and Push Container
               run: |-
-                  cd packages/stripe-warden &&
                   docker build \
                   -f Dockerfile \
                   -t "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}" .
-                  echo "=== IMAGE NAME: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
                   docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{ env.SERVICE }}:${{ env.TAG }}"
 
             # Deploy to Cloud Run
