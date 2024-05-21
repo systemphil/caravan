@@ -2,7 +2,7 @@ FROM golang:1.19-alpine AS builder
 
 WORKDIR /app
 
-COPY caravan/* .
+COPY . .
 
 RUN go mod download
 
