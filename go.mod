@@ -1,6 +1,6 @@
 module caravan
 
-go 1.22.2
+go 1.22.3
 
 require (
 	cloud.google.com/go v0.112.2 // indirect
