@@ -1,7 +1,8 @@
 {
     "version": "0.2",
     "ignorePaths": [
-        "**.go"
+        "**.go",
+        "**.rs"
     ],
     "dictionaryDefinitions": [],
     "dictionaries": [],
