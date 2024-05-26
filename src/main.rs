@@ -24,7 +24,7 @@ async fn main() {
         .layer(ServiceBuilder::new().layer(Extension(shared_state)));
 
     // Run server
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
+    let listener = tokio::net::TcpListener::bind("127.0.0.1:8080")
         .await
         .unwrap();
     println!("listening on {}", listener.local_addr().unwrap());
@@ -48,7 +48,6 @@ async fn handle_signed_url(
     Json(payload): Json<SignedUrlRequest>,
 ) -> Result<Json<SignUrlResponse>, StatusCode> {
     let bucket = "symposia-dev-bucket";
-    // let object = "video/cluvqhyly0007uwfdmg2hn33a/VID_20200103_135115.mp4";
 
     let object = payload.object;
     let storage_client = &state.storage_client;
