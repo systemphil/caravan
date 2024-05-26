@@ -4,6 +4,6 @@ COPY . .
 RUN cargo build --release
 
 FROM debian:stable-slim AS runtime
-COPY --from=builder /caravan/target/release/caravan /caravan
+COPY --from=builder /caravan/target/release/caravan /usr/local/bin/
 EXPOSE 8080
-CMD ["/usr/local/bin/caravan"]
+ENTRYPOINT ["/usr/local/bin/caravan"]
