@@ -4,7 +4,7 @@ use google_cloud_storage::{
     sign::SignedURLOptions,
 };
 use serde::{Deserialize, Serialize};
-use std::sync::Arc;
+use std::{io, sync::Arc};
 use tower::ServiceBuilder;
 
 struct AppState {
@@ -14,7 +14,7 @@ struct AppState {
 #[tokio::main]
 async fn main() {
     // Create and authenticate storage client, then set it as shared state
-    let config = ClientConfig::default().with_auth().await.unwrap();
+    let config = ClientConfig::default().with_auth().await?;
     let storage_client = Client::new(config);
     let shared_state = Arc::new(AppState { storage_client });
 
@@ -41,6 +41,12 @@ struct SignedUrlRequest {
 #[derive(Serialize)]
 struct SignUrlResponse {
     url: String,
+}
+
+async fn init_storage_config() -> Result<ClientConfig, io::Error> {
+    let config = ClientConfig::default().with_auth().await?;
+    Ok(config);
+    Err(e)
 }
 
 async fn handle_signed_url(
