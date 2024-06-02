@@ -50,6 +50,8 @@ func main() {
 	}
 	port := os.Getenv("PORT")
 	bucket := os.Getenv("GCP_PRIMARY_BUCKET_NAME")
+	fmt.Println("Port:", port)
+	fmt.Println("Bucket:", bucket)
 	/*
 		Initialize Google Cloud Storage client
 	*/
