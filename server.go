@@ -153,14 +153,14 @@ func generateV4GetObjectSignedURL(w http.ResponseWriter, bucket, object string, 
 	}
 	fmt.Println("==func=bucket:", bucket)
 	fmt.Println("==func=object:", object)
-	blob := client.Bucket(bucket).Object(object)
+	// blob := client.Bucket(bucket).Object(object)
 
-	// Check if the object exists
-	_, err := blob.Attrs(ctx)
-	if err != nil {
-		fmt.Fprintf(w, "No object found: %s", http.StatusText(http.StatusNotFound))
-		return "", nil
-	}
+	// // Check if the object exists
+	// _, err := blob.Attrs(ctx)
+	// if err != nil {
+	// 	fmt.Fprintf(w, "No object found: %s", http.StatusText(http.StatusNotFound))
+	// 	return "", nil
+	// }
 
 	u, err := client.Bucket(bucket).SignedURL(object, opts)
 	if err != nil {
