@@ -151,6 +151,8 @@ func generateV4GetObjectSignedURL(w http.ResponseWriter, bucket, object string, 
 		Method:  "GET",
 		Expires: time.Now().Add(15 * time.Minute),
 	}
+	fmt.Println("==func=bucket:", bucket)
+	fmt.Println("==func=object:", object)
 	blob := client.Bucket(bucket).Object(object)
 
 	// Check if the object exists
